@@ -476,7 +476,7 @@ typedef struct {
   jmp_buf buffer;
 } wasm_rt_jmp_buf;
 
-#ifndef _WIN32
+#if !defined(_WIN32) && !defined(__arm__)
 #define WASM_RT_SETJMP_SETBUF(buf) sigsetjmp(buf, 1)
 #else
 #define WASM_RT_SETJMP_SETBUF(buf) setjmp(buf)
@@ -485,7 +485,7 @@ typedef struct {
 #define WASM_RT_SETJMP(buf) \
   ((buf).initialized = true, WASM_RT_SETJMP_SETBUF((buf).buffer))
 
-#ifndef _WIN32
+#if !defined(_WIN32) && !defined(__arm__)
 #define WASM_RT_LONGJMP_UNCHECKED(buf, val) siglongjmp(buf, val)
 #else
 #define WASM_RT_LONGJMP_UNCHECKED(buf, val) longjmp(buf, val)
